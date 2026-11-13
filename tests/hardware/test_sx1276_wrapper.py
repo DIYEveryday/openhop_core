@@ -298,7 +298,9 @@ async def test_health_check_from_worker_thread_restarts_rx_task():
     await asyncio.sleep(0.05)
     # The dispatcher calls this through asyncio.to_thread
     assert await asyncio.to_thread(radio.check_radio_health) is False
-    assert await wait_until(lambda: radio._rx_irq_task is not None and not radio._rx_irq_task.done())
+    assert await wait_until(
+        lambda: radio._rx_irq_task is not None and not radio._rx_irq_task.done()
+    )
     got = []
     radio.set_rx_callback(got.append)
     chip.receive(b"again")

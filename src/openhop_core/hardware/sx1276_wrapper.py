@@ -786,7 +786,9 @@ class SX1276Radio(LoRaRadio):
         )
 
     async def wait_for_rx(self) -> bytes:
-        raise NotImplementedError("Use set_rx_callback(callback) to receive packets asynchronously.")
+        raise NotImplementedError(
+            "Use set_rx_callback(callback) to receive packets asynchronously."
+        )
 
     # ----------------------------------------------------------------------- TX
     def _calculate_tx_timeout(self, packet_length: int) -> tuple[int, int]:
@@ -921,7 +923,9 @@ class SX1276Radio(LoRaRadio):
         try:
             if respect_tx_lock:
                 try:
-                    await asyncio.wait_for(self._tx_lock.acquire(), timeout=max(0.1, timeout + 0.25))
+                    await asyncio.wait_for(
+                        self._tx_lock.acquire(), timeout=max(0.1, timeout + 0.25)
+                    )
                     acquired = True
                 except asyncio.TimeoutError:
                     return result(False, False, error="cad_waited_for_tx_lock_timeout")
@@ -936,9 +940,7 @@ class SX1276Radio(LoRaRadio):
             try:
                 await asyncio.wait_for(self._cad_event.wait(), timeout=timeout)
                 self._cad_event.clear()
-                return result(
-                    self._last_cad_detected, True, irq_status=self._last_cad_irq_status
-                )
+                return result(self._last_cad_detected, True, irq_status=self._last_cad_irq_status)
             except asyncio.TimeoutError:
                 flags = self.lora.read(REG_IRQ_FLAGS)
                 if flags & IRQ_CAD_DONE:
@@ -1060,7 +1062,9 @@ class SX1276Radio(LoRaRadio):
         def op():
             self.spreading_factor = int(sf)
             self._reconfigure(
-                lambda: self._write_modulation(self.spreading_factor, self.bandwidth, self.coding_rate)
+                lambda: self._write_modulation(
+                    self.spreading_factor, self.bandwidth, self.coding_rate
+                )
             )
 
         return self._safe_radio_operation("set spreading factor", op, f"SF set to {sf}")
@@ -1069,16 +1073,22 @@ class SX1276Radio(LoRaRadio):
         def op():
             self.bandwidth = int(bw)
             self._reconfigure(
-                lambda: self._write_modulation(self.spreading_factor, self.bandwidth, self.coding_rate)
+                lambda: self._write_modulation(
+                    self.spreading_factor, self.bandwidth, self.coding_rate
+                )
             )
 
-        return self._safe_radio_operation("set bandwidth", op, f"Bandwidth set to {bw / 1000:.1f} kHz")
+        return self._safe_radio_operation(
+            "set bandwidth", op, f"Bandwidth set to {bw / 1000:.1f} kHz"
+        )
 
     def set_coding_rate(self, cr: int) -> bool:
         def op():
             self.coding_rate = int(cr)
             self._reconfigure(
-                lambda: self._write_modulation(self.spreading_factor, self.bandwidth, self.coding_rate)
+                lambda: self._write_modulation(
+                    self.spreading_factor, self.bandwidth, self.coding_rate
+                )
             )
 
         return self._safe_radio_operation("set coding rate", op, f"Coding rate set to 4/{cr}")
@@ -1131,7 +1141,11 @@ class SX1276Radio(LoRaRadio):
                 self._reset_noise_floor()
                 self._start_rx_continuous()
             logger.info(
-                "Radio reconfigured: %.3f MHz BW=%.1f kHz SF%d CR4/%d", freq / 1e6, bw / 1000, sf, cr
+                "Radio reconfigured: %.3f MHz BW=%.1f kHz SF%d CR4/%d",
+                freq / 1e6,
+                bw / 1000,
+                sf,
+                cr,
             )
             return True
         except Exception as e:
