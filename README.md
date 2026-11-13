@@ -1,5 +1,20 @@
 # openHop Core
 
+> **Fork note: SX1276 driver for the Dragino LoRa/GPS HAT**
+>
+> This fork adds `SX1276Radio` (`openhop_core.hardware.sx1276_wrapper`), a
+> register-level driver for SX1276/SX1278 radios such as the **Dragino LoRa/GPS HAT**
+> for Raspberry Pi and RFM95/96 modules. Upstream openHop supports SX1262 radios only.
+>
+> It is used by the companion fork
+> [DIYEveryday/openhop_repeater](https://github.com/DIYEveryday/openhop_repeater/tree/sx1276-dragino),
+> which adds the `sx1276` radio type and the Dragino board preset. Installation
+> steps are in that fork's README.
+>
+> Tested on a Raspberry Pi Zero W + Dragino HAT v1.4 (869.618 MHz, SF8, BW 62.5 kHz);
+> unit tests: `tests/hardware/test_sx1276_wrapper.py`. The driver has been proposed
+> upstream; see the pull requests on [openhop-dev](https://github.com/openhop-dev).
+
 [![Documentation](https://img.shields.io/badge/docs-docs.openhop.dev-blue)](https://docs.openhop.dev/projects/openhop-core/)
 [![PyPI](https://img.shields.io/pypi/v/openhop-core)](https://pypi.org/project/openhop-core/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
